@@ -6,6 +6,8 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.alpakka.slick.javadsl.SlickSession
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 object Main extends App {
 
   implicit val system: ActorSystem = ActorSystem()
@@ -188,5 +190,39 @@ object Main extends App {
 
     def taskResultFk = foreignKey("task_result_fk", resultId, taskResults)(_.id)
   }
+
+  val usersCreateTest = DBIO.seq(
+    users += (1, "kirpichik", "password", "email", false),
+    users += (2, "test", "pwd", "test@example.com", true)
+  )
+
+  val devicesCreateTest = DBIO.seq(
+    devices ++= Seq(
+      (1, new Date(0), Option.empty, Option.empty, Option.empty, Option.empty, Option.empty, Option.empty, Option.empty),
+      (2, new Date(0), Option.empty, Option.empty, Option.empty, Option.empty, Option.empty, Option.empty, Option.empty),
+
+      (3, new Date(0), Option.empty, Option.empty, Option.empty, Option.empty, Option.empty, Option.empty, Option.empty)
+    ),
+
+    TableQuery[UserDevices] ++= Seq(
+      (1, 1),
+      (1, 2),
+
+      (2, 3)
+    )
+  )
+
+  val usersCreateFuture = session.db.run(usersCreateTest)
+  val devicesCreateFuture = session.db.run(devicesCreateTest)
+
+  usersCreateFuture.flatMap(_ => {
+    devicesCreateFuture.flatMap(_ => {
+      println("Users:")
+      session.db.run(users.result).map(_.foreach {
+        case (id, username, _, email, _) =>
+          println(s"$username with id = $id has email: $email")
+      })
+    })
+  })
 
 }
