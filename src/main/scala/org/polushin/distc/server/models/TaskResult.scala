@@ -5,7 +5,7 @@ import java.sql.Date
 import org.polushin.distc.server.models.TaskResultStatus.TaskResultStatus
 
 case class TaskResult(
-                       id: ResultId,
+                       id: Option[ResultId],
                        taskId: TaskId,
                        deviceId: DeviceId,
                        status: TaskResultStatus,

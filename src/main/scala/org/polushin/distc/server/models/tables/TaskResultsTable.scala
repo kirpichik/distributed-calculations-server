@@ -30,7 +30,7 @@ class TaskResultsTable(tag: Tag) extends Table[TaskResult](tag, "task_results") 
 
   def valueFloat = column[Option[Float]]("value_float")
 
-  override def * = (id, taskId, deviceId, status, date, valueInt, valueString, valueFloat) <> (TaskResult.tupled, TaskResult.unapply)
+  override def * = (id.?, taskId, deviceId, status, date, valueInt, valueString, valueFloat) <> (TaskResult.tupled, TaskResult.unapply)
 
   def task = foreignKey("result_task_fk", taskId, TableQuery[TasksTable])(_.id)
 

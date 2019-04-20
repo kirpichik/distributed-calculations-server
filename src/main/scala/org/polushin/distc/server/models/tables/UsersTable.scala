@@ -15,6 +15,6 @@ class UsersTable(tag: Tag) extends Table[User](tag, "users") {
 
   def canCreateTasks = column[Boolean]("can_create_tasks", O.Default(false))
 
-  override def * = (id, username, passwordHash, email, canCreateTasks) <> (User.tupled, User.unapply)
+  override def * = (id.?, username, passwordHash, email, canCreateTasks) <> (User.tupled, User.unapply)
 
 }

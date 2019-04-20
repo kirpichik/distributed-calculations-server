@@ -22,7 +22,7 @@ class TasksTable(tag: Tag) extends Table[Task](tag, "tasks") {
 
   def status = column[TaskStatus]("status")
 
-  override def * = (id, ownerId, displayName, description, status) <> (Task.tupled, Task.unapply)
+  override def * = (id.?, ownerId, displayName, description, status) <> (Task.tupled, Task.unapply)
 
   def owner = foreignKey("task_user_fk", ownerId, TableQuery[UsersTable])(_.id)
 

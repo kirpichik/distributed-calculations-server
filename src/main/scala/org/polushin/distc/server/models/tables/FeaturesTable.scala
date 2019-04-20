@@ -9,6 +9,6 @@ class FeaturesTable(tag: Tag) extends Table[Feature](tag, "features") {
 
   def displayName = column[String]("display_name")
 
-  override def * = (id, displayName) <> (Feature.tupled, Feature.unapply)
+  override def * = (id.?, displayName) <> (Feature.tupled, Feature.unapply)
 
 }

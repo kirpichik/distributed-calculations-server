@@ -15,7 +15,7 @@ class DevicesTable(tag: Tag) extends Table[Device](tag, "devices") {
 
   def currentTaskId = column[Option[TaskId]]("current_task_id", O.Default(Option.empty))
 
-  override def * = (id, ownerId, lastActivity, currentTaskId) <> (Device.tupled, Device.unapply)
+  override def * = (id.?, ownerId, lastActivity, currentTaskId) <> (Device.tupled, Device.unapply)
 
   def owner = foreignKey("device_user_fk", ownerId, TableQuery[UsersTable])(_.id)
 
