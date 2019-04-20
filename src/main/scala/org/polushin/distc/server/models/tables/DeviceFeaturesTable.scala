@@ -9,9 +9,11 @@ class DeviceFeaturesTable(tag: Tag) extends Table[DeviceFeature](tag, "device_fe
 
   def featureId = column[FeatureId]("feature_id")
 
-  override def * = (deviceId, featureId) <> (DeviceFeature.tupled, DeviceFeature.unapply)
+  def value = column[Int]("value")
 
-  def deviceFk = foreignKey("device_fk", deviceId, TableQuery[DevicesTable])(_.id)
+  override def * = (deviceId, featureId, value) <> (DeviceFeature.tupled, DeviceFeature.unapply)
+
+  def device = foreignKey("device_fk", deviceId, TableQuery[DevicesTable])(_.id)
 
   def feature = foreignKey("feature_fk", featureId, TableQuery[FeaturesTable])(_.id)
 

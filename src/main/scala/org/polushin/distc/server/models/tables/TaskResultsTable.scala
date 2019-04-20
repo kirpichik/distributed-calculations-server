@@ -9,10 +9,7 @@ import slick.jdbc.MySQLProfile.api._
 class TaskResultsTable(tag: Tag) extends Table[TaskResult](tag, "task_results") {
 
   //noinspection TypeAnnotation
-  private implicit val taskStatusMapper = MappedColumnType.base[TaskResultStatus, String](
-    e => e.toString,
-    s => TaskResultStatus.withName(s)
-  )
+  private implicit val taskStatusMapper = TaskResultStatus.mapper
 
   def id = column[TaskResultId]("id", O.PrimaryKey, O.AutoInc)
 
