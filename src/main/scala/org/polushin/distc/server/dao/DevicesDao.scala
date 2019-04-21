@@ -1,7 +1,5 @@
 package org.polushin.distc.server.dao
 
-import java.sql.Date
-
 import org.polushin.distc.server.models._
 import slick.jdbc.MySQLProfile.api._
 
@@ -22,9 +20,6 @@ object DevicesDao extends BaseDao {
   }
 
   def create(device: Device): Future[DeviceId] = devicesTable returning devicesTable.map(_.id) += device
-
-  def updateActivity(deviceId: DeviceId, date: Date): Future[Int] = devicesTable.filter(_.id === deviceId)
-    .map(device => device.lastActivity).update(date)
 
   def updateCurrentTask(deviceId: DeviceId, taskId: Option[TaskId]): Future[Int] = devicesTable.filter(_.id === deviceId)
     .map(device => device.currentTaskId).update(taskId)
