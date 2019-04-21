@@ -7,6 +7,7 @@ import slick.lifted.TableQuery
 import slick.sql.{FixedSqlStreamingAction, SqlAction}
 
 import scala.concurrent.Future
+import scala.language.implicitConversions
 
 trait BaseDao extends DatabaseConfig {
 

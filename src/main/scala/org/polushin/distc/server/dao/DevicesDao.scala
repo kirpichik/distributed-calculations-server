@@ -15,19 +15,19 @@ object DevicesDao extends BaseDao {
     deviceFeaturesTable.filter { deviceFeature =>
       features.map { case (id, (min, max)) =>
         deviceFeature.featureId === id &&
-          min.map(deviceFeature.value >= _).getOrElse(true) &&
-          max.map(deviceFeature.value <= _).getOrElse(true)
-      }.reduceLeftOption(_ || _).getOrElse(true)
+          min.map(deviceFeature.value >= _).getOrElse(true: Rep[Boolean]) &&
+          max.map(deviceFeature.value <= _).getOrElse(true: Rep[Boolean])
+      }.reduceLeftOption(_ || _).getOrElse(true: Rep[Boolean])
     }.map(_.deviceId).result
   }
 
   def create(device: Device): Future[DeviceId] = devicesTable returning devicesTable.map(_.id) += device
 
   def updateActivity(deviceId: DeviceId, date: Date): Future[Int] = devicesTable.filter(_.id === deviceId)
-    .map(device => (device.lastActivity, )).update((date, ))
+    .map(device => device.lastActivity).update(date)
 
   def updateCurrentTask(deviceId: DeviceId, taskId: Option[TaskId]): Future[Int] = devicesTable.filter(_.id === deviceId)
-    .map(device => (device.currentTaskId, )).update((taskId, ))
+    .map(device => device.currentTaskId).update(taskId)
 
   def addFeature(deviceFeature: DeviceFeature): Future[DeviceId] =
     deviceFeaturesTable returning deviceFeaturesTable.map(_.deviceId) += deviceFeature

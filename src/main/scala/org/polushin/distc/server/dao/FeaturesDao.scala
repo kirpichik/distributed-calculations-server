@@ -12,7 +12,7 @@ object FeaturesDao extends BaseDao {
   def create(feature: Feature): Future[FeatureId] = featuresTable returning featuresTable.map(_.id) += feature
 
   def updateDisplayName(featureId: FeatureId, displayName: String): Future[Int] = featuresTable.filter(_.id === featureId)
-    .map(feature => (feature.displayName, )).update((displayName, ))
+    .map(feature => feature.displayName).update(displayName)
 
   def delete(featureId: FeatureId): Future[Int] = featuresTable.filter(_.id === featureId).delete
 }

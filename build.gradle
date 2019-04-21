@@ -11,6 +11,11 @@ dependencies {
     implementation 'org.scala-lang:scala-library:2.12.8'
 
     implementation 'com.lightbend.akka:akka-stream-alpakka-slick_2.12:1.0-RC1'
+    implementation 'com.typesafe.akka:akka-http_2.12:10.1.5'
+    implementation 'com.typesafe.akka:akka-http_2.12:10.1.5'
+    implementation 'com.typesafe.akka:akka-stream_2.12:2.5.12'
+
+    implementation 'mysql:mysql-connector-java:8.0.15'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.scalatest:scalatest_2.12:3.0.5'

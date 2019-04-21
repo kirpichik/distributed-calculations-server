@@ -19,5 +19,5 @@ class DevicesTable(tag: Tag) extends Table[Device](tag, "devices") {
 
   def owner = foreignKey("device_user_fk", ownerId, TableQuery[UsersTable])(_.id)
 
-  def currentTask = foreignKey("device_task_fk", currentTaskId, TableQuery[TasksTable])(_.id)
+  def currentTask = foreignKey("device_task_fk", currentTaskId, TableQuery[TasksTable])(_.id.?)
 }
