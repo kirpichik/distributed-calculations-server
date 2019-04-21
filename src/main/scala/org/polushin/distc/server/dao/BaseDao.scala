@@ -22,6 +22,8 @@ trait BaseDao extends DatabaseConfig {
   val deviceFeaturesTable = TableQuery[DeviceFeaturesTable]
   val taskFeaturesTable = TableQuery[TaskFeaturesTable]
   val resultFilesTable = TableQuery[ResultFilesTable]
+  val devicePingTable = TableQuery[DevicePingTable]
+  val userTokensTable = TableQuery[UserTokensTable]
 
   private type ReadStreamAction[A] = FixedSqlStreamingAction[Seq[A], A, _ <: slick.dbio.Effect]
   private type FromAction[A] = SqlAction[A, NoStream, _ <: slick.dbio.Effect]

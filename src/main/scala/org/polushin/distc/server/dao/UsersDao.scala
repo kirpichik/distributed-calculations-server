@@ -1,6 +1,6 @@
 package org.polushin.distc.server.dao
 
-import org.polushin.distc.server.models.{User, UserId}
+import org.polushin.distc.server.models.{User, UserId, UserToken}
 import slick.jdbc.MySQLProfile.api._
 
 import scala.concurrent.Future
@@ -10,6 +10,15 @@ object UsersDao extends BaseDao {
   def findById(userId: UserId): Future[Option[User]] = usersTable.filter(_.id === userId).result.headOption
 
   def create(user: User): Future[UserId] = usersTable returning usersTable.map(_.id) += user
+
+  def addActiveToken(userToken: UserToken): Future[UserId] =
+    userTokensTable returning userTokensTable.map(_.userId) += userToken
+
+  def removeActiveToken(userId: UserId, token: String): Future[Int] =
+    userTokensTable.filter(_.userId === userId).filter(_.token === token).delete
+
+  def findActiveToken(userId: UserId, token: String): Future[Option[String]] =
+    userTokensTable.filter(_.userId === userId).filter(_.token === token).map(_.lastIp).result.headOption
 
   def updatePasswordHash(userId: UserId, passwordHash: String): Future[Int] = usersTable.filter(_.id === userId)
     .map(user => user.passwordHash).update(passwordHash)

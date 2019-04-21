@@ -21,6 +21,15 @@ object DevicesDao extends BaseDao {
 
   def create(device: Device): Future[DeviceId] = devicesTable returning devicesTable.map(_.id) += device
 
+  def updateActiveToken(deviceId: DeviceId, token: String): Future[Int] = devicesTable.filter(_.id === deviceId)
+    .map(device => device.activeToken).update(Option(token))
+
+  def removeActiveToken(deviceId: DeviceId): Future[Int] = devicesTable.filter(_.id === deviceId)
+    .map(device => device.activeToken).update(Option.empty)
+
+  def getActiveToken(deviceId: DeviceId): Future[Option[Option[String]]] = devicesTable.filter(_.id === deviceId)
+    .map(device => device.activeToken).result.headOption
+
   def updateCurrentTask(deviceId: DeviceId, taskId: Option[TaskId]): Future[Int] = devicesTable.filter(_.id === deviceId)
     .map(device => device.currentTaskId).update(taskId)
 
