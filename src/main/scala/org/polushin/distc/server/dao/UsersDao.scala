@@ -11,8 +11,8 @@ object UsersDao extends BaseDao {
 
   def create(user: User): Future[UserId] = usersTable returning usersTable.map(_.id) += user
 
-  def addActiveToken(userToken: UserToken): Future[UserId] =
-    userTokensTable returning userTokensTable.map(_.userId) += userToken
+  def addActiveToken(userToken: UserToken): Future[String] =
+    userTokensTable returning userTokensTable.map(_.token) += userToken
 
   def removeActiveToken(userId: UserId, token: String): Future[Int] =
     userTokensTable.filter(_.userId === userId).filter(_.token === token).delete
