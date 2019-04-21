@@ -5,9 +5,9 @@ import slick.jdbc.MySQLProfile.api._
 
 class UnitedTasksTable(tag: Tag) extends Table[UnitedTasks](tag, "united_tasks") {
 
-  def taskIdFirst = column[TaskId]("task_id_first")
+  def taskIdFirst = column[TaskId]("task_id_first", O.PrimaryKey)
 
-  def taskIdSecond = column[TaskId]("task_id_second")
+  def taskIdSecond = column[TaskId]("task_id_second", O.PrimaryKey)
 
   override def * = (taskIdFirst, taskIdSecond) <> (UnitedTasks.tupled, UnitedTasks.unapply)
 

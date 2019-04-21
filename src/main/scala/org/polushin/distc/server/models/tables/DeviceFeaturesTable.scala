@@ -5,9 +5,9 @@ import slick.jdbc.MySQLProfile.api._
 
 class DeviceFeaturesTable(tag: Tag) extends Table[DeviceFeature](tag, "device_features") {
 
-  def deviceId = column[DeviceId]("device_id")
+  def deviceId = column[DeviceId]("device_id", O.PrimaryKey)
 
-  def featureId = column[FeatureId]("feature_id")
+  def featureId = column[FeatureId]("feature_id", O.PrimaryKey)
 
   def value = column[Int]("value")
 

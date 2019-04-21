@@ -5,9 +5,9 @@ import slick.jdbc.MySQLProfile.api._
 
 class TaskFeaturesTable(tag: Tag) extends Table[TaskFeature](tag, "task_features") {
 
-  def taskId = column[TaskId]("task_id")
+  def taskId = column[TaskId]("task_id", O.PrimaryKey)
 
-  def featureId = column[FeatureId]("feature_id")
+  def featureId = column[FeatureId]("feature_id", O.PrimaryKey)
 
   def minValue = column[Option[Int]]("min_value")
 

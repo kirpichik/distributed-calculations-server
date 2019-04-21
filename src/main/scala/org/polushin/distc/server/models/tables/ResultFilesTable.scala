@@ -5,9 +5,9 @@ import slick.jdbc.MySQLProfile.api._
 
 class ResultFilesTable(tag: Tag) extends Table[ResultFile](tag, "result_files") {
 
-  def resultId = column[TaskResultId]("result_id")
+  def resultId = column[TaskResultId]("result_id", O.PrimaryKey)
 
-  def filename = column[String]("filename")
+  def filename = column[String]("filename", O.PrimaryKey)
 
   override def * = (resultId, filename) <> (ResultFile.tupled, ResultFile.unapply)
 
