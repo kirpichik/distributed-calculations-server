@@ -11,8 +11,8 @@ class UserDevicesTable(tag: Tag) extends Table[UserDevice](tag, "user_devices") 
 
   override def * = (userId, deviceId) <> (UserDevice.tupled, UserDevice.unapply)
 
-  def user = foreignKey("user_fk", userId, TableQuery[UsersTable])(_.id)
+  def user = foreignKey("user_devices_user_fk", userId, TableQuery[UsersTable])(_.id)
 
-  def device = foreignKey("device_fk", deviceId, TableQuery[DevicesTable])(_.id)
+  def device = foreignKey("user_devices_device_fk", deviceId, TableQuery[DevicesTable])(_.id)
 
 }

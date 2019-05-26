@@ -25,6 +25,6 @@ class DevicePingTable(tag: Tag) extends Table[DevicePing](tag, "device_ping") {
 
   override def * = (deviceId, lastActivity, longitude, latitude, wifiBssid, lanMac, lanIp, bluetoothMac) <> (DevicePing.tupled, DevicePing.unapply)
 
-  def device = foreignKey("device_fk", deviceId, TableQuery[DevicesTable])(_.id)
+  def device = foreignKey("device_ping_device_fk", deviceId, TableQuery[DevicesTable])(_.id)
 
 }

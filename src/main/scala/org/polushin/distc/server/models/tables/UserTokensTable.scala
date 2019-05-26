@@ -13,6 +13,6 @@ class UserTokensTable(tag: Tag) extends Table[UserToken](tag, "user_tokens") {
 
   override def * = (userId, token, lastIp) <> (UserToken.tupled, UserToken.unapply)
 
-  def user = foreignKey("user_fk", userId, TableQuery[UsersTable])(_.id)
+  def user = foreignKey("user_tokens_user_fk", userId, TableQuery[UsersTable])(_.id)
 
 }

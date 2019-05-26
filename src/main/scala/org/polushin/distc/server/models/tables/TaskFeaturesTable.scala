@@ -15,8 +15,8 @@ class TaskFeaturesTable(tag: Tag) extends Table[TaskFeature](tag, "task_features
 
   override def * = (taskId, featureId, minValue, maxValue) <> (TaskFeature.tupled, TaskFeature.unapply)
 
-  def task = foreignKey("feature_task_fk", taskId, TableQuery[TasksTable])(_.id)
+  def task = foreignKey("task_features_task_fk", taskId, TableQuery[TasksTable])(_.id)
 
-  def feature = foreignKey("feature_fk", featureId, TableQuery[FeaturesTable])(_.id)
+  def feature = foreignKey("task_features_feature_fk", featureId, TableQuery[FeaturesTable])(_.id)
 
 }

@@ -13,8 +13,8 @@ class DeviceFeaturesTable(tag: Tag) extends Table[DeviceFeature](tag, "device_fe
 
   override def * = (deviceId, featureId, value) <> (DeviceFeature.tupled, DeviceFeature.unapply)
 
-  def device = foreignKey("device_fk", deviceId, TableQuery[DevicesTable])(_.id)
+  def device = foreignKey("device_features_device_fk", deviceId, TableQuery[DevicesTable])(_.id)
 
-  def feature = foreignKey("feature_fk", featureId, TableQuery[FeaturesTable])(_.id)
+  def feature = foreignKey("device_features_feature_fk", featureId, TableQuery[FeaturesTable])(_.id)
 
 }

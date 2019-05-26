@@ -3,7 +3,7 @@ package org.polushin.distc.server.dao
 import org.polushin.distc.server.models.{User, UserId, UserToken}
 import slick.jdbc.MySQLProfile.api._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 object UsersDao extends BaseDao {
 
@@ -11,8 +11,20 @@ object UsersDao extends BaseDao {
 
   def create(user: User): Future[UserId] = usersTable returning usersTable.map(_.id) += user
 
-  def addActiveToken(userToken: UserToken): Future[String] =
-    userTokensTable returning userTokensTable.map(_.token) += userToken
+  def addActiveToken(userToken: UserToken)(implicit ec: ExecutionContext): Future[String] = {
+    val query = for {
+      rowsAffected <- userTokensTable
+        .filter(t => t.token === userToken.token && t.userId === userToken.userId)
+        .map(_.lastIp)
+        .update(userToken.lastIp)
+      result <- rowsAffected match {
+        case 0 => (userTokensTable += userToken).map(_ => userToken.token);
+        case 1 => DBIO.successful(userToken.token)
+        case _ => DBIO.failed(new RuntimeException)
+      }
+    } yield result
+    db.run(query)
+  }
 
   def removeActiveToken(userId: UserId, token: String): Future[Int] =
     userTokensTable.filter(_.userId === userId).filter(_.token === token).delete
