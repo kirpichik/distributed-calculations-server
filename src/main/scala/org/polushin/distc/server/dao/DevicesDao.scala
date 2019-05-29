@@ -3,7 +3,7 @@ package org.polushin.distc.server.dao
 import org.polushin.distc.server.models._
 import slick.jdbc.MySQLProfile.api._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 object DevicesDao extends BaseDao {
 
@@ -19,7 +19,11 @@ object DevicesDao extends BaseDao {
     }.map(_.deviceId).result
   }
 
-  def create(device: Device): Future[DeviceId] = devicesTable returning devicesTable.map(_.id) += device
+  def create(device: Device, userId: UserId)(implicit ec: ExecutionContext): Future[DeviceId] =
+    db.run(devicesTable returning devicesTable.map(_.id) += device).map(deviceId => {
+      userDevicesTable += UserDevice(userId, deviceId)
+      deviceId
+    })
 
   def updateActiveToken(deviceId: DeviceId, token: String): Future[Int] = devicesTable.filter(_.id === deviceId)
     .map(device => device.activeToken).update(Option(token))

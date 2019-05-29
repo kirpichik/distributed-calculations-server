@@ -1,10 +1,15 @@
 package org.polushin.distc.server.web.user
 
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives._
+import org.polushin.distc.server.dao.UsersDao
+import org.polushin.distc.server.mapping.JsonMappings
 import org.polushin.distc.server.web.user.device.DeviceRegisterPath
+import spray.json._
 
-trait UserPath extends DeviceRegisterPath with UserLoginPath with UserLogoutPath with UserRegisterPath {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+trait UserPath extends DeviceRegisterPath with UserLoginPath with UserLogoutPath with UserRegisterPath with JsonMappings {
 
   val userPath = pathPrefix("device") {
     path("register") {
@@ -18,7 +23,10 @@ trait UserPath extends DeviceRegisterPath with UserLoginPath with UserLogoutPath
     userRegisterPath
   } ~ path(IntNumber) { id =>
     get {
-      complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<h1>User info: $id</h1>"))
+      complete(UsersDao.findById(id).map {
+        case Some(value) => value.username
+        case None => "User not found"
+      }.map(_.toJson))
     }
   }
 
