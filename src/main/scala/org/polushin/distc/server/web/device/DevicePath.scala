@@ -1,12 +1,19 @@
 package org.polushin.distc.server.web.device
 
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.Route
+import org.polushin.distc.server.web.device.task.DeviceTaskPath
 
-trait DevicePath {
+trait DevicePath extends DeviceUnregisterPath with DeviceShutdownPath with DevicePingPath with DeviceTaskPath {
 
-  val devicePath = path("device") {
-    complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Device path</h1>"))
+  val devicePath: Route = pathPrefix("task") {
+    deviceTaskPath
+  } ~ path("unregister") {
+    deviceUnregisterPath
+  } ~ path("shutdown") {
+    deviceShutdownPath
+  } ~ path("ping") {
+    devicePingPath
   }
 
 }

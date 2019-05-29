@@ -9,6 +9,8 @@ object DevicesDao extends BaseDao {
 
   def findById(deviceId: DeviceId): Future[Option[Device]] = devicesTable.filter(_.id === deviceId).result.headOption
 
+  def findByToken(token: String): Future[Option[Device]] = devicesTable.filter(_.activeToken === token).result.headOption
+
   def findFeaturedDeviceIds(features: Map[FeatureId, (Option[Int], Option[Int])]): Future[Seq[DeviceId]] = {
     deviceFeaturesTable.filter { deviceFeature =>
       features.map { case (id, (min, max)) =>
