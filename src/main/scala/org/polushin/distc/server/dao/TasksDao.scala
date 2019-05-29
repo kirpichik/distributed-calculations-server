@@ -1,7 +1,7 @@
 package org.polushin.distc.server.dao
 
 import org.polushin.distc.server.models.TaskStatus.TaskStatus
-import org.polushin.distc.server.models.{Task, TaskId, TaskStatus}
+import org.polushin.distc.server.models.{Task, TaskId, TaskStatus, UserId}
 import slick.jdbc.MySQLProfile.api._
 
 import scala.concurrent.Future
@@ -13,6 +13,8 @@ object TasksDao extends BaseDao {
 
   def findById(taskId: TaskId): Future[Option[Task]] = tasksTable.filter(_.id === taskId).result.headOption
 
+  def findUserTasks(userId: UserId): Future[Seq[Task]] = tasksTable.filter(_.ownerId === userId).result
+
   def create(task: Task): Future[TaskId] = tasksTable returning tasksTable.map(_.id) += task
 
   def updateDisplayName(taskId: TaskId, displayName: String): Future[Int] = tasksTable.filter(_.id === taskId)
@@ -20,6 +22,8 @@ object TasksDao extends BaseDao {
 
   def updateDescription(taskId: TaskId, description: Option[String]): Future[Int] = tasksTable.filter(_.id === taskId)
     .map(task => task.description).update(description)
+
+  def update(task: Task): Future[Int] = tasksTable.update(task)
 
   def updateStatus(taskId: TaskId, status: TaskStatus): Future[Int] = tasksTable.filter(_.id === taskId)
     .map(task => task.status).update(status)

@@ -1,7 +1,7 @@
 package org.polushin.distc.server.web.user
 
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.Route
 import org.polushin.distc.server.dao.UsersDao
 import org.polushin.distc.server.mapping.JsonMappings
 import org.polushin.distc.server.web.user.device.DeviceRegisterPath
@@ -11,7 +11,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 trait UserPath extends DeviceRegisterPath with UserLoginPath with UserLogoutPath with UserRegisterPath with JsonMappings {
 
-  val userPath = pathPrefix("device") {
+  val userPath: Route = pathPrefix("device") {
     path("register") {
       deviceRegisterPath
     }
